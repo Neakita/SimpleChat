@@ -1,8 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleChat.API", "SimpleChat.API\SimpleChat.API.csproj", "{F21932FB-2701-4347-91D6-576311EAFF39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleChat.API.Data", "SimpleChat.API.Data\SimpleChat.API.Data.csproj", "{0DBB42BF-0B67-4D11-BFB5-94F06C236E69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleChat.API.Services", "SimpleChat.API.Services\SimpleChat.API.Services.csproj", "{3DA9A8AC-F0AA-499D-9B1E-F64309E305C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F21932FB-2701-4347-91D6-576311EAFF39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F21932FB-2701-4347-91D6-576311EAFF39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F21932FB-2701-4347-91D6-576311EAFF39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F21932FB-2701-4347-91D6-576311EAFF39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DBB42BF-0B67-4D11-BFB5-94F06C236E69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DBB42BF-0B67-4D11-BFB5-94F06C236E69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DBB42BF-0B67-4D11-BFB5-94F06C236E69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DBB42BF-0B67-4D11-BFB5-94F06C236E69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DA9A8AC-F0AA-499D-9B1E-F64309E305C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DA9A8AC-F0AA-499D-9B1E-F64309E305C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DA9A8AC-F0AA-499D-9B1E-F64309E305C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DA9A8AC-F0AA-499D-9B1E-F64309E305C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal
