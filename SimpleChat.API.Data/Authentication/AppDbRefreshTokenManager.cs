@@ -3,9 +3,9 @@ using SimpleChat.API.Services.Authentication;
 
 namespace SimpleChat.API.Data.Authentication;
 
-public sealed class AppDbUserRefreshTokenManager : IUserRefreshTokenManager
+public sealed class AppDbRefreshTokenManager : IRefreshTokenManager
 {
-	public AppDbUserRefreshTokenManager(IDbContextFactory<AppDbContext> dbContextFactory, RefreshTokenConfiguration refreshTokenConfiguration)
+	public AppDbRefreshTokenManager(IDbContextFactory<AppDbContext> dbContextFactory, RefreshTokenConfiguration refreshTokenConfiguration)
 	{
 		_dbContextFactory = dbContextFactory;
 		_refreshTokenConfiguration = refreshTokenConfiguration;

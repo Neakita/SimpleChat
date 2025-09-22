@@ -1,31 +1,30 @@
 ﻿using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SimpleChat.API.Services;
+using SimpleChat.API.Contracts;
 using SimpleChat.API.Services.Authentication;
 
 namespace SimpleChat.API.Authentication;
 
 [ApiController]
-[Route("api/[controller]")]
-public class AuthenticationController(IAuthenticator authenticator, JWTGenerator jwtGenerator, IUserRefreshTokenManager refreshTokenManager) : ControllerBase
+[Route("api")]
+public class AuthenticationController(IAuthenticator authenticator, JWTGenerator jwtGenerator, IRefreshTokenManager refreshTokenManager) : ControllerBase
 {
-	[HttpPost]
-	public async Task<IActionResult> Register(UserAuthenticationRequest request)
+	[Route("register")]
+	public async Task<IActionResult> Register(AuthenticationRequest request)
 	{
-		var isNameTaken = await authenticator.GetIsLoginTakenAsync(request.Login);
+		var isNameTaken = await authenticator.GetIsUserNameTakenAsync(request.Name);
 		if (isNameTaken)
 			return Conflict();
-		await authenticator.RegisterAsync(request.Login, request.Password);
+		await authenticator.RegisterAsync(request.Name, request.Password);
 		return Created();
 	}
 
-	[HttpGet]
-	public async Task<IActionResult> Login(UserAuthenticationRequest request)
+	[Route("login")]
+	public async Task<IActionResult> Login(AuthenticationRequest request)
 	{
-		var result = await authenticator.LoginAsync(request.Login, request.Password);
+		var result = await authenticator.LoginAsync(request.Name, request.Password);
 		var idClaim = new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString(CultureInfo.InvariantCulture));
 		var accessToken = jwtGenerator.GenerateToken(idClaim);
 		var tokenHandler = new JwtSecurityTokenHandler();
@@ -38,11 +37,11 @@ public class AuthenticationController(IAuthenticator authenticator, JWTGenerator
 		return Ok(response);
 	}
 
-	[HttpPost]
+	[Route("refresh")]
 	public async Task<IActionResult> RefreshAccessToken(string refreshToken)
 	{
 		var idClaim = HttpContext.User.Claims.Single(claim => claim.Type == ClaimTypes.NameIdentifier);
-		var userId = int.Parse(idClaim.Value);
+		var userId = int.Parse(idClaim.Value, CultureInfo.InvariantCulture);
 		var canRefresh = await refreshTokenManager.CanRefreshAccessToken(userId, refreshToken);
 		if (!canRefresh)
 			return Unauthorized();
@@ -52,7 +51,7 @@ public class AuthenticationController(IAuthenticator authenticator, JWTGenerator
 		var response = new RefreshAccessTokenResponse
 		{
 			Token = tokenHandler.WriteToken(accessToken),
-			ExpirationTimestamp = accessToken.ValidTo,
+			ExpirationTimestamp = accessToken.ValidTo
 		};
 		return Ok(response);
 	}

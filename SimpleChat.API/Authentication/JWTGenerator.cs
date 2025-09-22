@@ -14,8 +14,6 @@ public sealed class JWTGenerator(JWTGeneratorConfiguration configuration)
 	private JwtSecurityToken GenerateToken(TimeSpan expiration, IEnumerable<Claim> claims)
 	{
 		var token = new JwtSecurityToken(
-			issuer: configuration.Issuer,
-			audience: configuration.Audience,
 			claims: claims,
 			expires: DateTime.UtcNow.Add(expiration),
 			signingCredentials: new SigningCredentials(configuration.SecurityKey, SecurityAlgorithms.HmacSha256));

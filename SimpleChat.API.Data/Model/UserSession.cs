@@ -4,6 +4,8 @@ namespace SimpleChat.API.Data.Model;
 
 public sealed class UserSession
 {
+	public int Id { get; set; }
+
 	[MaxLength(64)]
 	public string RefreshToken { get; set; } = string.Empty;
 

@@ -2,7 +2,7 @@
 
 public interface IAuthenticator
 {
-	Task<bool> GetIsLoginTakenAsync(string login, CancellationToken cancellationToken = default);
-	Task<RegistrationResult> RegisterAsync(string login, string password, CancellationToken cancellationToken = default);
-	Task<LoginResult> LoginAsync(string login, string password, CancellationToken cancellationToken = default);
+	Task<bool> GetIsUserNameTakenAsync(string name, CancellationToken cancellationToken = default);
+	Task<RegistrationResult> RegisterAsync(string name, string password, CancellationToken cancellationToken = default);
+	Task<LoginResult> LoginAsync(string name, string password, CancellationToken cancellationToken = default);
 }

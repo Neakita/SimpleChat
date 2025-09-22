@@ -13,19 +13,19 @@ public sealed class AppDbAuthenticator : IAuthenticator
 		_refreshTokenConfiguration = refreshTokenConfiguration;
 	}
 
-	public async Task<bool> GetIsLoginTakenAsync(string login, CancellationToken cancellationToken)
+	public async Task<bool> GetIsUserNameTakenAsync(string name, CancellationToken cancellationToken)
 	{
 		await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
-		return await dbContext.Users.AnyAsync(user => user.Login == login, cancellationToken);
+		return await dbContext.Users.AnyAsync(user => user.Login == name, cancellationToken);
 	}
 
-	public async Task<RegistrationResult> RegisterAsync(string login, string password, CancellationToken cancellationToken)
+	public async Task<RegistrationResult> RegisterAsync(string name, string password, CancellationToken cancellationToken)
 	{
 		var user = new User
 		{
-			Login = login,
+			Login = name,
 			PasswordHash = _passwordHasher.GetPasswordHash(password),
-			DisplayName = login
+			DisplayName = name
 		};
 		await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 		await dbContext.Users.AddAsync(user, cancellationToken);
@@ -36,10 +36,10 @@ public sealed class AppDbAuthenticator : IAuthenticator
 		};
 	}
 
-	public async Task<LoginResult> LoginAsync(string login, string password, CancellationToken cancellationToken)
+	public async Task<LoginResult> LoginAsync(string name, string password, CancellationToken cancellationToken)
 	{
 		await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
-		var user = await GetUserAsync(dbContext, login, cancellationToken);
+		var user = await GetUserAsync(dbContext, name, cancellationToken);
 		if (!IsPasswordCorrect(user, password))
 			throw new ArgumentException("Invalid credentials");
 		var session = CreateSession();

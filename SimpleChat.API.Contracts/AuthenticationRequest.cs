@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SimpleChat.API.Authentication;
+namespace SimpleChat.API.Contracts;
 
-public sealed class UserAuthenticationRequest
+public sealed class AuthenticationRequest
 {
 	[Required]
 	[MinLength(8)]
 	[MaxLength(20)]
-	public string Login { get; set; } = string.Empty;
+	public string Name { get; set; } = string.Empty;
 
 	[Required]
 	[DataType(DataType.Password)]

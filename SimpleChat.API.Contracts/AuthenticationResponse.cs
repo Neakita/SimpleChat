@@ -1,4 +1,4 @@
-﻿namespace SimpleChat.API.Authentication;
+﻿namespace SimpleChat.API.Contracts;
 
 public sealed class AuthenticationResponse
 {
