@@ -34,6 +34,7 @@ public sealed partial class AuthenticationViewModel(APIClient apiClient) : ViewM
 		try
 		{
 			await apiClient.RegisterAsync(request);
+			await apiClient.LoginAsync(request);
 		}
 		catch (Exception exception)
 		{
@@ -52,7 +53,7 @@ public sealed partial class AuthenticationViewModel(APIClient apiClient) : ViewM
 		};
 		try
 		{
-			var response = await apiClient.LoginAsync(request);
+			await apiClient.LoginAsync(request);
 		}
 		catch (Exception exception)
 		{
