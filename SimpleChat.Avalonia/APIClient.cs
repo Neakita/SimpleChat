@@ -10,8 +10,6 @@ namespace SimpleChat.Avalonia;
 public sealed class APIClient
 {
 	public string RefreshToken { get; set; } = string.Empty;
-	public string AccessToken { get; set; } = string.Empty;
-	public DateTime AccessTokenExpirationTimestamp { get; set; }
 
 	public APIClient()
 	{
@@ -50,10 +48,12 @@ public sealed class APIClient
 		if (response == null)
 			throw new NullReferenceException("Unable to parse response as JSON");
 		RefreshToken = response.RefreshToken;
-		AccessToken = response.AccessToken;
-		AccessTokenExpirationTimestamp = response.AccessTokenExpirationTimestamp;
+		_accessToken = response.AccessToken;
+		_accessTokenExpirationTimestamp = response.AccessTokenExpirationTimestamp;
 		return response;
 	}
 
 	private readonly HttpClient _httpClient;
+	private string _accessToken = string.Empty;
+	private DateTime _accessTokenExpirationTimestamp;
 }
