@@ -10,5 +10,6 @@ public sealed class AppDbContext : DbContext
 		Database.EnsureCreated();
 	}
 
-	public DbSet<User> Users { get; set; } = null!;
+	public DbSet<User> Users { get; set; }
+	public DbSet<DirectMessage> DirectMessages { get; set; }
 }

@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using SimpleChat.API.Authentication;
 using SimpleChat.API.Data;
 using SimpleChat.API.Data.Authentication;
+using SimpleChat.API.Services;
 using SimpleChat.API.Services.Authentication;
 
 namespace SimpleChat.API;
@@ -57,6 +58,19 @@ public static class Program
 					ValidateIssuerSigningKey = true,
 					IssuerSigningKey = jwtGeneratorConfiguration.SecurityKey
 				};
+
+				// https://learn.microsoft.com/en-us/aspnet/core/signalr/authn-and-authz?view=aspnetcore-9.0#built-in-jwt-authentication
+				options.Events = new JwtBearerEvents
+				{
+					OnMessageReceived = context =>
+					{
+						var accessToken = context.Request.Query["access_token"];
+						var path = context.HttpContext.Request.Path;
+						if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+							context.Token = accessToken;
+						return Task.CompletedTask;
+					}
+				};
 			});
 		builder.Services.AddMvcCore();
 
@@ -68,12 +82,17 @@ public static class Program
 		});
 		builder.Services.AddTransient<IAuthenticator, AppDbAuthenticator>();
 		builder.Services.AddTransient<IRefreshTokenManager, AppDbRefreshTokenManager>();
+		builder.Services.AddTransient<IDirectMessagePersister, AppDbDirectMessagePersister>();
+		builder.Services.AddTransient<IDirectMessagesProvider, AppDbDirectMessagesProvider>();
+		builder.Services.AddTransient<IUsersProvider, AppDbUsersProvider>();
 
 		var passwordSaltSeed = builder.Configuration["PasswordSaltSeed"] ??
 		                       throw new NullReferenceException("Password salt seed is not set");
 		builder.Services.AddSingleton<IPasswordHasher>(new SaltyPasswordHasher(int.Parse(passwordSaltSeed)));
 
 		builder.Services.AddTransient<JWTGenerator>();
+
+		builder.Services.AddSignalR();
 	}
 
 	private static void ConfigureApplication(WebApplication application)
@@ -81,5 +100,7 @@ public static class Program
 		application.UseHttpsRedirection();
 		application.UseAuthorization();
 		application.MapControllers();
+		application.MapHub<ConnectionNotificationsHub>("/hubs/notifications");
+		application.MapHub<DirectCommunicationHub>("/hubs/direct");
 	}
 }

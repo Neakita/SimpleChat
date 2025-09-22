@@ -8,7 +8,7 @@ using SimpleChat.API.Services.Authentication;
 namespace SimpleChat.API.Authentication;
 
 [ApiController]
-[Route("api")]
+[Route("api/auth")]
 public class AuthenticationController(IAuthenticator authenticator, JWTGenerator jwtGenerator, IRefreshTokenManager refreshTokenManager) : ControllerBase
 {
 	[Route("register")]
@@ -16,7 +16,7 @@ public class AuthenticationController(IAuthenticator authenticator, JWTGenerator
 	{
 		var isNameTaken = await authenticator.GetIsUserNameTakenAsync(request.Name);
 		if (isNameTaken)
-			return Conflict();
+			return Conflict("The name is already taken");
 		await authenticator.RegisterAsync(request.Name, request.Password);
 		return Created();
 	}
@@ -25,11 +25,14 @@ public class AuthenticationController(IAuthenticator authenticator, JWTGenerator
 	public async Task<IActionResult> Login(AuthenticationRequest request)
 	{
 		var result = await authenticator.LoginAsync(request.Name, request.Password);
+		if (result == null)
+			return BadRequest("Invalid credentials");
 		var idClaim = new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString(CultureInfo.InvariantCulture));
 		var accessToken = jwtGenerator.GenerateToken(idClaim);
 		var tokenHandler = new JwtSecurityTokenHandler();
 		var response = new AuthenticationResponse
 		{
+			UserId = result.UserId,
 			AccessToken = tokenHandler.WriteToken(accessToken),
 			RefreshToken = result.RefreshToken,
 			AccessTokenExpirationTimestamp = accessToken.ValidTo,

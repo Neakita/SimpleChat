@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SimpleChat.API.Data.Model;
 
-[Index(nameof(Login), IsUnique = true)]
+[Index(nameof(Name), IsUnique = true)]
 public sealed class User
 {
 	[Key]
@@ -12,15 +12,11 @@ public sealed class User
 	[Required]
 	[MinLength(8)]
 	[MaxLength(20)]
-	public string Login { get; set; } = string.Empty;
+	public string Name { get; set; } = string.Empty;
 
 	[MinLength(8)]
 	[MaxLength(20)]
 	public string PasswordHash { get; set; } = string.Empty;
-
-	[MinLength(8)]
-	[MaxLength(20)]
-	public string DisplayName { get; set; } = string.Empty;
 
 	public bool IsAdministrator { get; set; }
 	

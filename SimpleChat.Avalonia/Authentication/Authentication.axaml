@@ -1,0 +1,36 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SimpleChat.Avalonia.Authentication"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             x:Class="SimpleChat.Avalonia.Authentication.AuthenticationView"
+             x:DataType="local:IAuthenticationDataContext" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Design.DataContext>
+        <local:DesignAuthenticationDataContext/>
+    </Design.DataContext>
+    <StackPanel Spacing="16"
+                MinWidth="200">
+        <TextBox Watermark="Name"
+                 UseFloatingWatermark="True"
+                 Text="{Binding Name}"
+                 InnerLeftContent="{icons:MaterialIconExt Kind=UserOutline}"/>
+        <TextBox Watermark="Password"
+                 UseFloatingWatermark="True"
+                 PasswordChar="*"
+                 Text="{Binding Password}"
+                 InnerLeftContent="{icons:MaterialIconExt Kind=PasswordOutline}"/>
+        <Button Content="Login"
+                Command="{Binding LoginCommand}"/>
+        <Button Content="Register"
+                Command="{Binding RegisterCommand}"/>
+        <icons:MaterialIconText Text="{Binding ErrorMessage}"
+                                Kind="AlertCircleOutline"
+                                Foreground="Red"
+                                HorizontalAlignment="Center"
+                                IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                IsTextSelectable="True"/>
+
+    </StackPanel>
+</UserControl>

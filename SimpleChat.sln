@@ -6,7 +6,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleChat.API.Data", "Simp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleChat.API.Services", "SimpleChat.API.Services\SimpleChat.API.Services.csproj", "{3DA9A8AC-F0AA-499D-9B1E-F64309E305C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleChat.Avalonia", "SimpleChat.Avalonia\SimpleChat.Avalonia.csproj", "{6D00D874-216F-4D57-818A-546E7F9A532A}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleChat.API.Contracts", "SimpleChat.API.Contracts\SimpleChat.API.Contracts.csproj", "{FAE35246-64B9-4582-9D1D-5E34076DCDC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleChat.API.Tests", "SimpleChat.API.Tests\SimpleChat.API.Tests.csproj", "{D7EC91F4-7711-4BE9-B990-54EFC6C10E23}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BA7FB77A-C3A8-413E-8657-466B62540418}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,7 +2,8 @@
 
 public sealed class AuthenticationResponse
 {
-	public required string AccessToken { get; init; }
-	public required string RefreshToken { get; init; }
-	public required DateTime AccessTokenExpirationTimestamp { get; init; }
+	public int UserId { get; set; }
+	public string AccessToken { get; set; } = string.Empty;
+	public string RefreshToken { get; set; } = string.Empty;
+	public DateTime AccessTokenExpirationTimestamp { get; set; }
 }

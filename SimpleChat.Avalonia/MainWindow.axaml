@@ -1,0 +1,28 @@
+<suki:SukiWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="clr-namespace:SimpleChat.Avalonia"
+        xmlns:authentication="clr-namespace:SimpleChat.Avalonia.Authentication"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SimpleChat.Avalonia.MainWindow"
+        x:DataType="avalonia:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="SimpleChat.Avalonia">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <avalonia:MainViewModel/>
+    </Design.DataContext>
+
+    <ContentControl Content="{Binding DataContext}">
+        <ContentControl.DataTemplates>
+            <DataTemplate DataType="authentication:IAuthenticationDataContext">
+                <authentication:AuthenticationView/>
+            </DataTemplate>
+        </ContentControl.DataTemplates>
+    </ContentControl>
+
+</suki:SukiWindow>
