@@ -94,7 +94,7 @@ public static class Program
 		builder.Services.AddTransient<IDirectMessagePersister, AppDbDirectMessagePersister>();
 		builder.Services.AddTransient<IDirectMessagesProvider, AppDbDirectMessagesProvider>();
 		builder.Services.AddTransient<IUsersProvider, AppDbUsersProvider>();
-		builder.Services.AddTransient<IConnectionStatusManager, AppDbConnectionStatusManager>();
+		builder.Services.AddTransient<IConnectionStatusManager, InMemoryConnectionStatusManager>();
 
 		var passwordSaltSeed = builder.Configuration["PasswordSaltSeed"] ??
 		                       throw new NullReferenceException("Password salt seed is not set");

@@ -13,8 +13,7 @@ public sealed class AppDbUsersProvider(IDbContextFactory<AppDbContext> dbContext
 			.Select(user => new UserInfo
 			{
 				Id = user.Id,
-				Name = user.Name,
-				IsOnline = user.IsOnline
+				Name = user.Name
 			})
 			.ToListAsync(cancellationToken);
 	}
@@ -28,8 +27,7 @@ public sealed class AppDbUsersProvider(IDbContextFactory<AppDbContext> dbContext
 			.Select(user => new UserInfo
 			{
 				Id = user.Id,
-				Name = user.Name,
-				IsOnline = user.IsOnline
+				Name = user.Name
 			})
 			.SingleOrDefaultAsync(cancellationToken);
 	}

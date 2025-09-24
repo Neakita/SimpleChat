@@ -2,5 +2,6 @@
 
 public interface IConnectionStatusManager
 {
-	Task SetConnectionStatusAsync(int userId, bool isOnline, CancellationToken cancellationToken = default);
+	bool GetConnectionStatus(int userId);
+	void SetConnectionStatus(int userId, bool isOnline);
 }

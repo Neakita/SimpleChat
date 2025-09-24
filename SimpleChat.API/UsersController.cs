@@ -8,7 +8,7 @@ namespace SimpleChat.API;
 [ApiController]
 [Route("api")]
 [Authorize]
-public sealed class UsersController(IUsersProvider provider) : ControllerBase
+public sealed class UsersController(IUsersProvider provider, IConnectionStatusManager connectionStatusManager) : ControllerBase
 {
 	[HttpGet]
 	[Route("users")]
@@ -30,13 +30,13 @@ public sealed class UsersController(IUsersProvider provider) : ControllerBase
 		return Ok(response);
 	}
 
-	private static UserInfoResponse ToResponse(UserInfo user)
+	private UserInfoResponse ToResponse(UserInfo user)
 	{
 		return new UserInfoResponse
 		{
 			Id = user.Id,
 			Name = user.Name,
-			IsOnline = user.IsOnline
+			IsOnline = connectionStatusManager.GetConnectionStatus(user.Id)
 		};
 	}
 }

@@ -21,6 +21,4 @@ public sealed class User
 	public bool IsAdministrator { get; set; }
 	
 	public UserSession? Session { get; set; }
-	
-	public bool IsOnline { get; set; }
 }

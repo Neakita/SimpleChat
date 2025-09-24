@@ -10,17 +10,15 @@ public sealed class ConnectionStatusHub(IConnectionStatusManager connectionStatu
 	public override Task OnConnectedAsync()
 	{
 		var userId = GetCurrentClientUserId();
-		return Task.WhenAll(
-			connectionStatusManager.SetConnectionStatusAsync(userId, true),
-			Clients.Others.SendAsync("UserConnected", userId));
+		connectionStatusManager.SetConnectionStatus(userId, true);
+		return Clients.Others.SendAsync("UserConnected", userId);
 	}
 
 	public override Task OnDisconnectedAsync(Exception? exception)
 	{
 		var userId = GetCurrentClientUserId();
-		return Task.WhenAll(
-			connectionStatusManager.SetConnectionStatusAsync(userId, false),
-			Clients.Others.SendAsync("UserDisconnected", userId));
+		connectionStatusManager.SetConnectionStatus(userId, false);
+		return Clients.Others.SendAsync("UserDisconnected", userId);
 	}
 
 	private int GetCurrentClientUserId()
