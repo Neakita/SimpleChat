@@ -6,7 +6,7 @@ namespace SimpleChat.API.Data;
 
 public sealed class AppDbDirectMessagePersister(IDbContextFactory<AppDbContext> dbContextFactory) : IDirectMessagePersister
 {
-	public async Task PersistMessageAsync(DirectMessageInfo messageInfo, CancellationToken cancellationToken = default)
+	public async Task<int> PersistMessageAsync(DirectMessageInfo messageInfo, CancellationToken cancellationToken = default)
 	{
 		var messageEntity = new DirectMessage
 		{
@@ -18,5 +18,6 @@ public sealed class AppDbDirectMessagePersister(IDbContextFactory<AppDbContext> 
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 		await dbContext.DirectMessages.AddAsync(messageEntity, cancellationToken);
 		await dbContext.SaveChangesAsync(cancellationToken);
+		return messageEntity.Id;
 	}
 }

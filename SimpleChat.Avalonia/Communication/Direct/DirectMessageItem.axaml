@@ -1,0 +1,57 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SimpleChat.Avalonia.Communication.Direct"
+             xmlns:communication="clr-namespace:SimpleChat.Avalonia.Communication"
+             mc:Ignorable="d"
+             d:DesignWidth="250"
+             x:Class="SimpleChat.Avalonia.Communication.Direct.DirectMessageItem"
+             x:DataType="local:IDirectMessageDataContext"
+             d:DataContext="{x:Static local:DesignDirectMessageDataContext.Outgoing}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="IncomingMessageBrush" Color="Gray" Opacity="0.4"/>
+            <SolidColorBrush x:Key="OutgoingMessageBrush" Color="SteelBlue" Opacity="0.4"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="Path">
+            <Setter Property="DockPanel.Dock" Value="Left"/>
+            <Setter Property="Fill" Value="{StaticResource IncomingMessageBrush}"/>
+            <Style Selector="^.outgoing">
+                <Setter Property="Fill" Value="{StaticResource OutgoingMessageBrush}"/>
+                <Setter Property="RenderTransform">
+                    <ScaleTransform ScaleX="-1"/>
+                </Setter>
+                <Setter Property="DockPanel.Dock" Value="Right"/>
+            </Style>
+        </Style>
+        <Style Selector="Border">
+            <Setter Property="Background" Value="{StaticResource IncomingMessageBrush}"/>
+            <Setter Property="CornerRadius" Value="8 8 8 0"/>
+            <Style Selector="^.outgoing">
+                <Setter Property="Background" Value="{StaticResource OutgoingMessageBrush}"/>
+                <Setter Property="CornerRadius" Value="8 8 0 8"/>
+            </Style>
+        </Style>
+    </UserControl.Styles>
+    <DockPanel>
+        <Path Classes.outgoing="{Binding Type, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static communication:MessageType.Outgoing}}"
+              VerticalAlignment="Bottom"
+              Data="M 0,16H 16V 0C 16,0 16,8 0,16Z"/>
+        <Border Classes.outgoing="{Binding Type, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static communication:MessageType.Outgoing}}"
+                Padding="8 8 8 0">
+            <Grid RowDefinitions="Auto Auto">
+                <TextBlock Text="{Binding Content}"
+                           TextWrapping="Wrap"
+                           Grid.Row="0"/>
+                <TextBlock Text="{Binding Timestamp, StringFormat=t}"
+                           Grid.Row="1"
+                           HorizontalAlignment="Right"
+                           FontSize="12"/>
+            </Grid>
+        </Border>
+    </DockPanel>
+    
+</UserControl>

@@ -5,6 +5,7 @@
         xmlns:avalonia="clr-namespace:SimpleChat.Avalonia"
         xmlns:authentication="clr-namespace:SimpleChat.Avalonia.Authentication"
         xmlns:suki="https://github.com/kikipoulet/SukiUI"
+        xmlns:communication="clr-namespace:SimpleChat.Avalonia.Communication"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SimpleChat.Avalonia.MainWindow"
         x:DataType="avalonia:MainViewModel"
@@ -21,6 +22,9 @@
         <ContentControl.DataTemplates>
             <DataTemplate DataType="authentication:IAuthenticationDataContext">
                 <authentication:AuthenticationView/>
+            </DataTemplate>
+            <DataTemplate DataType="communication:IChatsBrowserDataContext">
+                <communication:ChatsBrowserView/>
             </DataTemplate>
         </ContentControl.DataTemplates>
     </ContentControl>

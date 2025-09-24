@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -48,15 +49,16 @@ public static class Program
 		builder.Services.AddSingleton(refreshTokenConfiguration);
 
 
-		builder.Services.AddAuthorization();
 		builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			.AddJwtBearer(options =>
 			{
 				options.TokenValidationParameters = new TokenValidationParameters
 				{
+					ValidateIssuer = false,
+					ValidateAudience = false,
 					ValidateLifetime = true,
 					ValidateIssuerSigningKey = true,
-					IssuerSigningKey = jwtGeneratorConfiguration.SecurityKey
+					IssuerSigningKey = jwtGeneratorConfiguration.SecurityKey,
 				};
 
 				// https://learn.microsoft.com/en-us/aspnet/core/signalr/authn-and-authz?view=aspnetcore-9.0#built-in-jwt-authentication
@@ -72,6 +74,13 @@ public static class Program
 					}
 				};
 			});
+		builder.Services.AddAuthorization(options =>
+		{
+			options.DefaultPolicy = new AuthorizationPolicyBuilder()
+				.RequireAuthenticatedUser()
+				.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+				.Build();
+		});
 		builder.Services.AddMvcCore();
 
 		builder.Services.AddDbContextFactory<AppDbContext>(options =>
@@ -85,6 +94,7 @@ public static class Program
 		builder.Services.AddTransient<IDirectMessagePersister, AppDbDirectMessagePersister>();
 		builder.Services.AddTransient<IDirectMessagesProvider, AppDbDirectMessagesProvider>();
 		builder.Services.AddTransient<IUsersProvider, AppDbUsersProvider>();
+		builder.Services.AddTransient<IConnectionStatusManager, AppDbConnectionStatusManager>();
 
 		var passwordSaltSeed = builder.Configuration["PasswordSaltSeed"] ??
 		                       throw new NullReferenceException("Password salt seed is not set");
@@ -98,9 +108,10 @@ public static class Program
 	private static void ConfigureApplication(WebApplication application)
 	{
 		application.UseHttpsRedirection();
+		application.UseAuthentication();
 		application.UseAuthorization();
 		application.MapControllers();
-		application.MapHub<ConnectionNotificationsHub>("/hubs/notifications");
+		application.MapHub<ConnectionStatusHub>("/hubs/notifications");
 		application.MapHub<DirectCommunicationHub>("/hubs/direct");
 	}
 }

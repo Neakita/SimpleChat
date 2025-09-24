@@ -6,7 +6,7 @@ using AuthenticationViewModel = SimpleChat.Avalonia.Authentication.Authenticatio
 
 namespace SimpleChat.Avalonia;
 
-public partial class App : Application
+public sealed partial class App : Application
 {
 	public override void Initialize()
 	{
@@ -20,12 +20,14 @@ public partial class App : Application
 			// Line below is needed to remove Avalonia data validation.
 			// Without this line you will get duplicate validations from both Avalonia and CT
 			BindingPlugins.DataValidators.RemoveAt(0);
+			var mainViewModel = new MainViewModel();
+			const string serverUri = "https://localhost:7210";
+			var apiClient = new APIClient(serverUri);
+			var hubsClient = new HubsClient(serverUri, apiClient);
+			mainViewModel.DataContext = new AuthenticationViewModel(apiClient, hubsClient, mainViewModel);
 			desktop.MainWindow = new MainWindow
 			{
-				DataContext = new MainViewModel
-				{
-					DataContext = new AuthenticationViewModel(new APIClient())
-				}
+				DataContext = mainViewModel
 			};
 		}
 

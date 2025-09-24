@@ -9,11 +9,28 @@ public sealed class AppDbUsersProvider(IDbContextFactory<AppDbContext> dbContext
 	{
 		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 		return await dbContext.Users
+			.AsNoTracking()
 			.Select(user => new UserInfo
 			{
 				Id = user.Id,
-				Name = user.Name
+				Name = user.Name,
+				IsOnline = user.IsOnline
 			})
 			.ToListAsync(cancellationToken);
+	}
+
+	public async Task<UserInfo?> GetUser(int id, CancellationToken cancellationToken = default)
+	{
+		await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+		return await dbContext.Users
+			.AsNoTracking()
+			.Where(user => user.Id == id)
+			.Select(user => new UserInfo
+			{
+				Id = user.Id,
+				Name = user.Name,
+				IsOnline = user.IsOnline
+			})
+			.SingleOrDefaultAsync(cancellationToken);
 	}
 }

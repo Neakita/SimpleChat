@@ -39,7 +39,7 @@ public sealed class AppDbAuthenticator : IAuthenticator
 	{
 		await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 		var user = await GetUserAsync(dbContext, name, cancellationToken);
-		if (!IsPasswordCorrect(user, password))
+		if (user == null || !IsPasswordCorrect(user, password))
 			return null;
 		var session = CreateSession();
 		user.Session = session;
@@ -55,13 +55,11 @@ public sealed class AppDbAuthenticator : IAuthenticator
 	private readonly IPasswordHasher _passwordHasher;
 	private readonly RefreshTokenConfiguration _refreshTokenConfiguration;
 
-	private static async Task<User> GetUserAsync(AppDbContext dbContext, string login, CancellationToken cancellationToken)
+	private static async Task<User?> GetUserAsync(AppDbContext dbContext, string login, CancellationToken cancellationToken)
 	{
 		var user = await dbContext.Users
 			.Include(user => user.Session)
 			.SingleOrDefaultAsync(user => user.Name == login, cancellationToken);
-		if (user == null)
-			throw new ArgumentException("Invalid credentials");
 		return user;
 	}
 

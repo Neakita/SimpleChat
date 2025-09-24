@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SimpleChat.API.Contracts;
+using SimpleChat.Avalonia.Communication;
 
 namespace SimpleChat.Avalonia.Authentication;
 
-public sealed partial class AuthenticationViewModel(APIClient apiClient) : ViewModel, IAuthenticationDataContext
+public sealed partial class AuthenticationViewModel(APIClient apiClient, HubsClient hubsClient, IPresentationManager presentationManager) : ViewModel, IAuthenticationDataContext
 {
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(RegisterCommand), nameof(LoginCommand))]
 	public partial string Name { get; set; } = string.Empty;
@@ -39,7 +41,9 @@ public sealed partial class AuthenticationViewModel(APIClient apiClient) : ViewM
 		catch (Exception exception)
 		{
 			ErrorMessage = exception.Message;
+			return;
 		}
+		await PresentChatsBrowserAsync();
 	}
 
 	[RelayCommand(CanExecute = nameof(IsCredentialsNotEmpty))]
@@ -58,6 +62,15 @@ public sealed partial class AuthenticationViewModel(APIClient apiClient) : ViewM
 		catch (Exception exception)
 		{
 			ErrorMessage = exception.Message;
+			return;
 		}
+		await PresentChatsBrowserAsync();
+	}
+
+	private async Task PresentChatsBrowserAsync(CancellationToken cancellationToken = default)
+	{
+		var chatsBrowser = new ChatsBrowserViewModel(apiClient, hubsClient);
+		await chatsBrowser.InitializeAsync(cancellationToken);
+		presentationManager.DataContext = chatsBrowser;
 	}
 }

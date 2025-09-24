@@ -1,0 +1,49 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SimpleChat.Avalonia.Communication"
+             xmlns:direct="clr-namespace:SimpleChat.Avalonia.Communication.Direct"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             x:Class="SimpleChat.Avalonia.Communication.ChatsBrowserView"
+             x:DataType="local:IChatsBrowserDataContext"
+             d:DataContext="{x:Static local:DesignChatsBrowserDataContext.WithoutChats}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="200" MaxWidth="400" Width="*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Panel Grid.Column="0">
+            <Panel.Background>
+                <SolidColorBrush Color="Black" Opacity="0.1"/>
+            </Panel.Background>
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        IsVisible="{Binding !Chats.Count}">
+                <icons:MaterialIcon Width="100"
+                                    Height="100"
+                                    Opacity="0.1"
+                                    Kind="AccountMultiple"
+                                    HorizontalAlignment="Center"/>
+                <TextBlock Text="No chats yet"
+                           HorizontalAlignment="Center"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Opacity="0.4"/>
+            </StackPanel>
+            <ListBox ItemsSource="{Binding Chats}"
+                     SelectedItem="{Binding SelectedChat}"
+                     Classes="WithoutCheck">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:ChatBrowserItem/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Panel>
+        <direct:DirectChatView Grid.Column="1"
+                               DataContext="{Binding SelectedChat}"
+                               IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull}}"/>
+    </Grid>
+</UserControl>

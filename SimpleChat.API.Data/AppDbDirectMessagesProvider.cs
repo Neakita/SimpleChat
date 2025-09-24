@@ -20,8 +20,9 @@ public sealed class AppDbDirectMessagesProvider(IDbContextFactory<AppDbContext> 
 			query = query.Where(message => message.Id < paginationCursor);
 
 		query = query
-			.OrderBy(message => message.Id)
-			.TakeLast(PageSize);
+			.OrderByDescending(message => message.Id)
+			.Take(PageSize)
+			.OrderBy(message => message.Id);
 
 		return await query
 			.Select(message => new DirectMessageInfo

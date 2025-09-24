@@ -2,5 +2,5 @@
 
 public interface IDirectMessagePersister
 {
-	Task PersistMessageAsync(DirectMessageInfo messageInfo, CancellationToken cancellationToken = default);
+	Task<int> PersistMessageAsync(DirectMessageInfo messageInfo, CancellationToken cancellationToken = default);
 }

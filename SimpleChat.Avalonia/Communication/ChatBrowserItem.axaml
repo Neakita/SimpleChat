@@ -1,0 +1,55 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SimpleChat.Avalonia.Communication"
+             xmlns:converters="clr-namespace:SimpleChat.Avalonia.Converters"
+             mc:Ignorable="d"
+             x:Class="SimpleChat.Avalonia.Communication.ChatBrowserItem"
+             x:DataType="local:IChatItemDataContext"
+             d:DataContext="{x:Static local:DesignChatDataContext.OnlineInstance}"
+             d:DesignWidth="150">
+    <UserControl.Styles>
+        <Style Selector="Border.online">
+            <Setter Property="Clip">
+                <CombinedGeometry GeometryCombineMode="Exclude">
+                    <CombinedGeometry.Geometry1>
+                        <EllipseGeometry RadiusX="18" RadiusY="18" Center="18 18"/>
+                    </CombinedGeometry.Geometry1>
+                    <CombinedGeometry.Geometry2>
+                        <EllipseGeometry RadiusX="8" RadiusY="8" Center="31 31"/>
+                    </CombinedGeometry.Geometry2>
+                </CombinedGeometry>
+            </Setter>
+        </Style>
+        <Style Selector="Ellipse.online">
+            <Setter Property="Fill" Value="MediumSeaGreen"/>
+        </Style>
+    </UserControl.Styles>
+    <Grid ColumnDefinitions="Auto *"
+          ColumnSpacing="10">
+        <Border Grid.Column="0"
+                Width="36"
+                Height="36"
+                Background="DarkGray"
+                CornerRadius="18"
+                Classes.online="{Binding IsOnline}">
+            <TextBlock Text="{Binding Name, Converter={x:Static converters:CustomConverters.Initials}}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontWeight="Medium"/>
+        </Border>
+        <Ellipse Grid.Column="0"
+                 Width="10"
+                 Height="10"
+                 HorizontalAlignment="Right"
+                 VerticalAlignment="Bottom"
+                 Classes.online="{Binding IsOnline}"/>
+        <TextBlock Grid.Column="1"
+                   Text="{Binding Name}"
+                   FontSize="14"
+                   FontWeight="Medium"
+                   VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis"/>
+    </Grid>
+</UserControl>

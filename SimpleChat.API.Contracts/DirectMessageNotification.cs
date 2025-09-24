@@ -4,6 +4,8 @@ namespace SimpleChat.API.Contracts;
 
 public sealed class DirectMessageNotification
 {
+	public int Id { get; set; }
+
 	public int SenderId { get; set; }
 
 	public DateTime Timestamp { get; set; }

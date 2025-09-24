@@ -8,6 +8,6 @@ public sealed class SendDirectMessageRequest
 
 	public DateTime Timestamp { get; set; }
 
-	[MinLength(1)]
+	[MinLength(1), MaxLength(1000)]
 	public string Content { get; set; } = string.Empty;
 }

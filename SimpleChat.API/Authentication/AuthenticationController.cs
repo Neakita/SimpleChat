@@ -43,7 +43,9 @@ public class AuthenticationController(IAuthenticator authenticator, JWTGenerator
 	[Route("refresh")]
 	public async Task<IActionResult> RefreshAccessToken(string refreshToken)
 	{
-		var idClaim = HttpContext.User.Claims.Single(claim => claim.Type == ClaimTypes.NameIdentifier);
+		var idClaim = HttpContext.User.Claims.SingleOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+		if (idClaim == null)
+			return Unauthorized("Unable to get user id");
 		var userId = int.Parse(idClaim.Value, CultureInfo.InvariantCulture);
 		var canRefresh = await refreshTokenManager.CanRefreshAccessToken(userId, refreshToken);
 		if (!canRefresh)
